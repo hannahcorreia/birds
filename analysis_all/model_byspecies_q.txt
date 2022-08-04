@@ -1,0 +1,47 @@
+
+  model{
+  # define prior: probability of q (prob of success for each sire)
+  q ~ dbeta(1,1)
+  
+  # likelihood: stochastic relationship
+  # sires ~ (truncated binomial)
+  for(i in 1:N){
+    nsires[i] ~ dbinom(q, littersize[i]) T(0,)
+  }
+  
+  # DERIVED QUANTITIES
+  # Calculate the number of mates (deterministic relation?)
+  # q is probability of success here
+  # for(i in 1:N){
+  #   nmates[i] <- (q * nsires[i]) / (1-q)
+  # }
+  
+  # mates ~ (negative binomial); 
+  ##
+  # NOTE: in R, representation of NB dist is same as Casella-Berger stat theory book
+  # whereas, Ash uses the alternative NB pmf seen in the note for NB dist in Casella-Berger
+  # Therefore, P(X=x|r,p) used in R is P(X=M-r|r,q) in terms of number of failures M-r
+  # mean of NB is μ = n(1-p)/p and variance n(1-p)/p^2, where p is the prob of SUCCESS
+  # R is calculating the number of failures M-r, and we generated the number of successes (sires, R)
+  # therefore the number of mates M = failures + successes = failed.m + nsires
+  ##
+  for(i in 1:N){
+    failed.m[i] ~ dnbinom(q, nsires[i]) T(nsires[i],)
+    nmates[i] <- failed.m[i] + nsires[i]
+  }
+  for(i in 1:N){
+    est.M[i] <- nsires[i]/q
+  }
+  
+  # Calculated quantities from original data
+  for(j in 1:J){
+    avg.R[j] <- avgbrood[j]*q/(1-(1-q)^avgbrood[j])     # avg sires, given avgbrood and estimated q
+  }
+  for(j in 1:J){
+    avg.M[j] <- avgsire[j]/q     # avg mates, given avgsire and estimated q
+  }
+  for(j in 1:J){
+    est.pmult.kq[j] <- (1 - (avgbrood[j] * q) * (1 - q)^(avgbrood[j] - 1)) / (1 - (1 - q)^(avgbrood[j]))   
+    # estimated prob. of mult. paternity, given avgbrood and estimated q
+  }
+}

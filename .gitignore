@@ -1,0 +1,17 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+birds.Rproj
+/prelim_run
+/second_run
+/analysis_demo
+/manuscript
+*.docx
+*.xlsx
+*.pdf
+*.png
+*.eps
+*.rda
+birddata_cleaning.R
