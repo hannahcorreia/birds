@@ -38,7 +38,7 @@ post.summ = function(post, var) {
 #########################################################
 
 ##### read and prepare data #####
-dat <- read.csv("phylo_mammals_fixed.csv")
+dat <- read.csv("phylo_mammals.csv") ## cleaned in "prep_MCMCdata_phylo.R"
 
 # expand data to create multiple broods within each species (sample size * 10)
 for(i in 1:nrow(dat)){
@@ -97,7 +97,7 @@ jagsscript.byspecies_q <- cat("
     avg.M[j] <- avgsire[j]/q     # avg mates, given avgsire and estimated q
   }
   for(j in 1:J){
-    est.pmult.kq[j] <- (1 - (avgbrood[j] * q) * (1 - q)^(avgbrood[j] - 1)) / (1 - (1 - q)^(avgbrood[j]))   
+    est.pmult.kq[j] <- 1 - avgbrood[j] * q * (1 - q)^(avgbrood[j] - 1) / (1 - (1 - q)^(avgbrood[j]))   
     # estimated prob. of mult. paternity, given avgbrood and estimated q
   }
 }
@@ -360,13 +360,14 @@ ggsave("p_CL_phylo.eps", plot = g1b, device = cairo_ps, width = 11, height = 7.5
 
 
 ################ CALCULATE EFFECT SIZES ###################
-mammals_1 <- read.csv("phylo_mammals_fixed.csv", header = TRUE)
+mammals_1 <- read.csv("phylo_mammals.csv", header = TRUE)
 mammals_1 <- mammals_1[!is.na(mammals_1$avgsire),]
 
 # yi = Bayes pmult - true pmult (i.e. MCMC_total_resids$resid_pmult)
 # vi = pmult*(1-pmult)/nbrood
 
-mammals_singlerun <- merge(mammals_1[,c(1:3)], MCMC_resids, by = c("species", "avgbrood"))
+mammals_singlerun <- merge(mammals_1[,c("species","common_name","sci_name","nbrood","avgbrood")], 
+                           MCMC_resids, by = c("species", "avgbrood"))
 # order by brood size
 mammals_singlerun <- mammals_singlerun[order(mammals_singlerun$avgbrood, mammals_singlerun$pmult, mammals_singlerun$nbrood),]
 
@@ -525,33 +526,4 @@ g4 <- ggplot() +
 # Edited plot with legend on bottom for
 ggsave("phylo_MS-k_alt.eps", plot = g4, device = cairo_ps, width = 8, height = 10, dpi = 320) #Legend on bottom
 
-
-
-##### MERGE ORIGINAL DATA FILE WITH RESULTS FROM BAYESIAN MCMC ANALYSIS #####
-## Original data
-# dat_orig <- read.csv("phylo_mammals_fixed.csv")
-MammD <- read.csv("MammD_Mar2022.csv")
-col_order <- colnames(MammD)
-
-## Remove "old" MCMC results from MammD file
-MammD_renew <- MammD[,!(colnames(MammD) %in% c("PMP","resPMP","MeanQ","MeanM"))]
-
-## New MCMC results and residuals ("effect sizes")
-load("phyloMCMC_resids.rda")
-## Keep only relevant variables
-res <- MCMC_resids[,c("species","avgbrood","avgsire","pmult","pred_pmult",
-                      "resid_pmult","mean.q","mean.nmates")]
-## Rename res variables to "match" the Excel MammD file
-colnames(res) <- c("species","MeanLS","MeanSires","MP","PMP","resPMP","MeanQ","MeanM")
-
-## Merge MCMC results with Excel data - can match without animal name 
-## (b/c combo of "MeanLS","MeanSires","MP" are unique in this dataset)
-new_MammD <- merge(MammD_renew, res, 
-                   by = c("species","MeanLS","MeanSires","MP"))
-
-## Reorder columns in new_MammD to be the same order as in the original MammD Excel file
-library(dplyr)
-MammDb <- new_MammD %>% relocate(all_of(col_order)) %>% arrange(FileNo)
-
-write.csv(MammDb, file = "MammDb.csv", row.names = FALSE)
 

@@ -111,7 +111,7 @@ jagsscript.byspecies_q <- cat("
     avg.M[j] <- avgsire[j]/q     # avg mates, given avgsire and estimated q
   }
   for(j in 1:J){
-    est.pmult.kq[j] <- (1 - (avgbrood[j] * q) * (1 - q)^(avgbrood[j] - 1)) / (1 - (1 - q)^(avgbrood[j]))   
+    est.pmult.kq[j] <- 1 - avgbrood[j] * q * (1 - q)^(avgbrood[j] - 1) / (1 - (1 - q)^(avgbrood[j]))   
     # estimated prob. of mult. paternity, given avgbrood and estimated q
   }
 }
