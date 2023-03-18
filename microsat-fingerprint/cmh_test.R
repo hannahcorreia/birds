@@ -109,7 +109,7 @@ plot(lor, xlab="Brood size", ylab = "LOR(DNA / MP)", main = "")
 load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/analysis_microsat/MCMC_resids.rda")
 bird_resids <- MCMC_resids
 ## Residuals for mammals (latest from phylo, 63spp)
-load("/Users/Hannah/Documents/Research/Masamu/paternity/phylogeny/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
 mammal_resids <- MCMC_resids 
 
 mammal_resids$group <- "Mammals"

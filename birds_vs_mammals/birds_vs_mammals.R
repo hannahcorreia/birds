@@ -10,7 +10,7 @@ library(irr)
 ## microsat-only
 paternity_birds <- read.csv("/Users/Hannah/Documents/Research/Masamu/paternity/birds/analysis_microsat/paternity_birds_ms.csv") 
 ## mammals - latest from phlyo analysis (64spp)
-paternity_mammals <- read.csv("/Users/Hannah/Documents/Research/Masamu/paternity/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phylo_mammals_fixed.csv")
+paternity_mammals <- read.csv("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phylo_mammals.csv")
 
 
 #### Krippendorff's alpha for MP (birds - microsat only) ####
@@ -207,7 +207,7 @@ k_alpha(t(sire_mat), alpha_q = 0.05, nboot = 1000, scaling = "ratio")
 
 
 #### Krippendorff's alpha for pB-p (mammals) ####
-load("/Users/Hannah/Documents/Research/Masamu/paternity/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
 mammal_resids <- MCMC_resids 
 
 ## Create unique species ID number for each species and obs number for each pmult within species
@@ -240,7 +240,7 @@ k_alpha(t(resid_mat), alpha_q = 0.05, nboot = 1000, scaling = "interval")
 load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/analysis_microsat/MCMC_resids.rda")
 bird_resids <- MCMC_resids
 ## Residuals for mammals (latest from phylo, 64spp)
-load("/Users/Hannah/Documents/Research/Masamu/paternity/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
 mammal_resids <- MCMC_resids 
 
 mammal_resids$group <- "Mammals"
@@ -272,7 +272,7 @@ t.test(broodsz_b, broodsz_m, alternative = "two.sided", var.equal = FALSE)
 
 ## Difference in number of broods sampled between birds and mammals (need original data)
 birds_data <- readxl::read_xlsx("/Users/Hannah/Documents/Research/Masamu/paternity/birds/paternity_birds.xlsx")[,-1]
-mammals_data <- read.csv("/Users/Hannah/Documents/Research/Masamu/paternity/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phylo_mammals_fixed.csv")
+mammals_data <- read.csv("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phylo_mammals.csv")
 
 samples_b <- birds_data[birds_data$DNA=="microsatellite",]$Nbr
 samples_m <- mammals_data[!is.na(mammals_data$avgsire),]$nbrood
@@ -531,16 +531,16 @@ ggsave("boxplot_resids-birds-mammals_rotated.eps", plot = ggbpr, device = cairo_
 load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/analysis_microsat/MCMC_resids.rda")
 bird_resids <- MCMC_resids
 ## Residuals for mammals (latest from phylo, 64spp)
-load("/Users/Hannah/Documents/Research/Masamu/paternity/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/birds/birds_vs_mammals/mammals_for_comparison/MCMC_estimates_byspecies/phyloMCMC_resids.rda")
 mammal_resids <- MCMC_resids 
 ## Residuals for fish
-load("/Users/Hannah/Documents/Research/Masamu/paternity/fish/single_run/MCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/all_taxa_together/fish/single_run/MCMC_resids.rda")
 fish_resids <- MCMC_resids 
 ## Residuals for reptiles/amphibians
-load("/Users/Hannah/Documents/Research/Masamu/paternity/herps/single_run/MCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/all_taxa_together/herps/single_run/MCMC_resids.rda")
 herp_resids <- MCMC_resids 
 ## Residuals for inverts
-load("/Users/Hannah/Documents/Research/Masamu/paternity/inverts/single_run/MCMC_resids.rda")
+load("/Users/Hannah/Documents/Research/Masamu/paternity/all_taxa_together/inverts/single_run/MCMC_resids.rda")
 inverts_resids <- MCMC_resids 
 
 
