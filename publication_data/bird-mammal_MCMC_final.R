@@ -1,14 +1,14 @@
 ###############################################################################
 ###############################################################################
 ##  R code for Bayesian analysis of multiple paternity in bird and in mammals
-##  Written by Hannah Correia @ Harvard DSI: hcorreia@hsph.harvard.edu
+##  Written by Hannah Correia @ Johns Hopkins University: hcorrei2@jhu.edu
 ###############################################################################
 ###############################################################################
 
 #### **Bayesian analysis of birds** ####
 
 ## For large nbroods, will likely run into "vector memory exhausted" error
-## On Mac systems, 
+## On smaller Mac systems, 
 ## Open terminal,and type in the following three lines:
 ## cd ~
 ## touch .Renviron
@@ -16,6 +16,7 @@
 ## Save the following as the first line of .Renviron:
 ## R_MAX_VSIZE=100Gb 
 ## Note: This limit includes both physical and virtual memory.
+
 
 
 # clear the workspace
@@ -62,6 +63,29 @@ dat1 <- read.csv("paternity_birds.csv")
 
 ## remove birds with nbrood = NA and avgbrood = NA (can't run without avgbrood)
 dat <- dat1[!is.na(dat1$nbrood) & !is.na(dat1$avgbrood),]
+
+
+###############################################################################
+##  NOTE:
+##  The following code runs through ALL bird species together
+##  In order to replicate analyses correctly, the following code must
+##  be run on each subsample of bird species. 
+##  E.g., for comparing socially monogamous birds to socially non-monogamous 
+##  birds, must subset data to only species that are socially monogamous, 
+##  run the code, then subset the data to only species that are socially
+##  non-monogamous, then run the code again.
+##
+##  Separate files/folders for each subset analysis are recommended.
+###############################################################################
+
+## Uncomment one of the following depending on subset of birds being analyzed
+# dat <- dat[dat$DNA=="microsatellite",]  ## for microsatellite DNA populations
+# dat <- dat[dat$DNA=="fingerprint",]  ## for fingerprinting populations
+# dat <- dat[dat$SocMon=="mono",]  ## for socially monogamous populations (microsat DNA only)
+# dat <- dat[dat$SocMon=="xmono",]  ## for socially non-monogamous populations (microsat DNA only)
+
+
+
 
 # expand data to create multiple broods within each species (sample size * 10)
 for(i in 1:nrow(dat)){

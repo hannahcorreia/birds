@@ -1,7 +1,12 @@
 ###############################################################################
 ###############################################################################
 ##  R code for Bayesian analysis of multiple paternity in bird and in mammals
-##  Written by Hannah Correia @ Harvard DSI: hcorreia@hsph.harvard.edu
+##  Written by Hannah Correia @ Johns Hopkins University: hcorrei2@jhu.edu
+##
+##  Must run bird-mammal_MCMC_final.R first, and have output files
+##  "MCMC_resids_mammals.rda"
+##  "MCMC_resids_birds.rda" for each subset analysis 
+##  (see NOTE, lines 69-84, in "bird-mammal_MCMC_final.R" for details)
 ##
 ##  Requires "k_alpha.R" code from Zapf et al. 2016 
 ##  (https://doi.org/10.1186/s12874-016-0200-9 see "Additional file 3" 
@@ -65,10 +70,10 @@ plot(lor, xlab="Brood size", ylab = "LOR(DNA / pmult)", main = "")
 
 
 ## need estimated pB for clusWilcox from separate Bayesian analyses 
-load("../../birds/analysis_microsat/MCMC_resids.rda") ## results from microsat Bayesian analysis
+load("analysis_microsat/MCMC_resids.rda") ## results from microsat DNA birds Bayesian analysis
 MCMC_resids_microsat <- MCMC_resids
 
-load("../../birds/analysis_fingerprint/MCMC_resids.rda") ## results from fingerprint Bayesian analysis
+load("analysis_fingerprint/MCMC_resids.rda") ## results from fingerprint DNA birds Bayesian analysis
 MCMC_resids_fingerprint <- MCMC_resids
 
 MCMC_resids_microsat$DNA <- "microsatellite"
@@ -175,10 +180,10 @@ plot(lor, xlab="Brood size", ylab = "LOR(SocMon / pmult)", main = "")
 
 
 ## need estimated pB for clusWilcox from separate Bayesian analyses 
-load("../../birds/analysis_mono/MCMC_resids.rda") ## results from monogamous Bayesian analysis
+load("analysis_mono/MCMC_resids.rda") ## results from monogamous birds Bayesian analysis
 MCMC_resids_mono <- MCMC_resids
 
-load("../../birds/analysis_xmono/MCMC_resids.rda") ## results from non-monogamous Bayesian analysis
+load("analysis_xmono/MCMC_resids.rda") ## results from non-monogamous birds Bayesian analysis
 MCMC_resids_xmono <- MCMC_resids
 
 MCMC_resids_mono$SocMon <- "mono"
@@ -217,8 +222,6 @@ clusWilcox.test(resid_pmult, cluster = brood_grpnum, group = mono_num, data = bi
 ###  BASED ON THE ABOVE ANALYSES, WE CONCLUDE TO ONLY USE MICROSATELLITE STUDIES
 ###  FOR BIRDS AND MOVE ON TO THE MCMC ANALYSIS OF BIRDS AND MAMMALS USING
 ###  POPULATIONS AS UNITS OF INTEREST, IN ORDER TO THEN COMPARE THE TWO TAXA.
-###  Run "bird-mammal_MCMC_final.R" before proceeding to the next section,
-###  as results of the Bayesian analysis are needed.
 
 
 
@@ -303,7 +306,7 @@ k_alpha(t(bs_mat), alpha_q = 0.05, nboot = 1000, scaling = "ratio")
 
 ## birds (results data, microsat-only)
 load("MCMC_resids_birds.rda")
-bird_resids <- MCMC_resids ## results from Bayesian analysis
+bird_resids <- MCMC_resids ## results from microsat DNA birds Bayesian analysis
 
 ## mammals (results data)
 load("MCMC_resids_mammals.rda")
