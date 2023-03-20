@@ -412,7 +412,7 @@ pdf(file = paste0("forest_bayes_singlerun-w-labels.pdf"), width = 10, height = 2
 print(
   forest(paternity.meta.bayes,  
          order = order(birds_singlerun$avgbrood), cex = 1,
-         xlim = c(-2.5,2),
+         xlim = c(-2.5,2), 
          xlab = expression(paste(p[B], " - p"))),
   quote = FALSE,
   text(-2.5, 139, "Species",  pos=4),
@@ -435,7 +435,7 @@ print(
   forest(res1, #slab = part1.species, 
          #order = order(birds_singlerun[birds_singlerun$species %in% part1.species,]$avgbrood), 
          cex = 1,
-         xlim = c(-2.5,2),
+         xlim = c(-2.5,2), alim = c(-0.6, 0.8), 
          xlab = expression(paste(p[B], " - p")),
          mlab = ""),  ## mlab controls the "RE Model" text at the bottom left
   quote = FALSE,
@@ -457,7 +457,7 @@ print(
   forest(res2, #slab = part2.species, 
          #order = order(birds_singlerun[birds_singlerun$species %in% part2.species,]$avgbrood), 
          cex = 1,
-         xlim = c(-2.5,2),
+         xlim = c(-2.5,2), alim = c(-0.6, 0.8), 
          xlab = expression(paste(p[B], " - p")),
          mlab = ""),  ## mlab controls the "RE Model" text at the bottom left
   quote = FALSE,
